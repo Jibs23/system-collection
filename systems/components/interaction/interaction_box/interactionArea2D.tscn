@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://nsvi8e8jrha1"]
+
+[ext_resource type="Script" uid="uid://8b0ycg4j618n" path="res://systems/components/interaction/interaction_box/interaction_box.gd" id="1_l0a38"]
+
+[node name="InteractionArea2D" type="Area2D" groups=["interacter"]]
+monitorable = false
+script = ExtResource("1_l0a38")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

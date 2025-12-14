@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="InventoryItem" load_steps=3 format=3 uid="uid://bvvmet7w4lp4f"]
+
+[ext_resource type="Script" uid="uid://cpej8i8pm45gk" path="res://Scripts/Custom Classes/inventory_item.gd" id="1_fqide"]
+[ext_resource type="Script" uid="uid://b37e053lffoqp" path="res://Scenes/states/act_move_dash.gd" id="2_yhm31"]
+
+[resource]
+script = ExtResource("1_fqide")
+item_name = "Dash item"
+state_script = ExtResource("2_yhm31")
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"

@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://65uaoatl3rr5"]
+
+[ext_resource type="Texture2D" uid="uid://g3p2alcpbsd7" path="res://systems/components/health/health_component/test_scene/sheet_number.png" id="1_amgud"]
+[ext_resource type="PackedScene" uid="uid://bksv7rhjcgsw1" path="res://systems/components/health/health_component/health_component.tscn" id="2_4tv8s"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="background" type="Polygon2D" parent="."]
+position = Vector2(257.00003, 126.3869)
+rotation = -0.001015267
+color = Color(1, 0.5023, 0.43550968, 1)
+antialiased = true
+polygon = PackedVector2Array(255, 185, 286, 255, 381, 226, 370, 143)
+
+[node name="number" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(574, 327.3869)
+rotation = -0.0010152671
+scale = Vector2(3.4377234, 3.4377234)
+texture = ExtResource("1_amgud")
+hframes = 6
+frame = 5
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_4tv8s")]
+
+[node name="hurt" type="Button" parent="."]
+offset_left = 431.0
+offset_top = 351.3869
+offset_right = 483.0
+offset_bottom = 382.3869
+theme_override_colors/font_color = Color(0.88, 0.484, 0.484, 1)
+text = "HURT"
+
+[node name="heal" type="Button" parent="."]
+offset_left = 685.0
+offset_top = 358.0
+offset_right = 737.0
+offset_bottom = 389.0
+theme_override_colors/font_color = Color(0.5984, 0.88, 0.61248, 1)
+text = "HEAL"
+
+[connection signal="health_changed" from="HealthComponent" to="number" method="set_frame"]
+[connection signal="pressed" from="hurt" to="HealthComponent" method="_on_value_recieved" binds= [1]]
+[connection signal="pressed" from="heal" to="HealthComponent" method="_on_value_recieved" binds= [-1]]

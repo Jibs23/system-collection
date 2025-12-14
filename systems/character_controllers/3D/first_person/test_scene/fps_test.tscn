@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=3 uid="uid://dhickgiiitues"]
+
+[ext_resource type="PackedScene" uid="uid://ra1pfx3jkrqr" path="res://systems/character_controllers/3D/first_person/first_person_controller.tscn" id="1_irka7"]
+
+[sub_resource type="Gradient" id="Gradient_irka7"]
+colors = PackedColorArray(0.33999997, 0.5820001, 1, 1, 0.79, 0.972, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_n884v"]
+gradient = SubResource("Gradient_irka7")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_7jdo3"]
+panorama = SubResource("GradientTexture2D_n884v")
+
+[sub_resource type="Sky" id="Sky_j1s24"]
+sky_material = SubResource("PanoramaSkyMaterial_7jdo3")
+
+[sub_resource type="Environment" id="Environment_irka7"]
+background_mode = 2
+sky = SubResource("Sky_j1s24")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_irka7"]
+albedo_color = Color(0.32, 1, 0.51266664, 1)
+
+[sub_resource type="GDScript" id="GDScript_irka7"]
+resource_name = "test_interactable"
+script/source = "extends CSGBox3D
+
+func _on_interact(source:Node, _target:Node):
+	print(source.name,\" interacted with \",_target.name)
+"
+
+[node name="World" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 13.046858, -8.109947)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_irka7")
+
+[node name="FirstPersonController" parent="." instance=ExtResource("1_irka7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0279388, 0)
+camera_look_lock = 85.0
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 1, -3, 1.2, -7.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+material = SubResource("StandardMaterial3D_irka7")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 1, 0, 0.50000006, -7.5)
+use_collision = true
+size = Vector3(3, 2, 2)
+material = SubResource("StandardMaterial3D_irka7")
+script = SubResource("GDScript_irka7")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+cast_shadow = 0
+use_collision = true
+size = Vector3(20, 1, 27)

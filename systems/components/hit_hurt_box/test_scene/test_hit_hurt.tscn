@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3 uid="uid://dyrcdnjgu7145"]
+
+[ext_resource type="PackedScene" uid="uid://dq2v5ad8gyqs7" path="res://systems/components/hit_hurt_box/hurtbox/hurt_box2D.tscn" id="1_r3jrd"]
+[ext_resource type="PackedScene" uid="uid://bx18366y7df2u" path="res://systems/components/hit_hurt_box/hitbox/hit_box2D.tscn" id="2_cebmn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mvfsa"]
+size = Vector2(36, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3gxg2"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_0wfs4"]
+a = Vector2(-217, -4)
+b = Vector2(633, -1)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="hurt" type="RigidBody2D" parent="."]
+position = Vector2(294, 142)
+
+[node name="HurtBox" parent="hurt" instance=ExtResource("1_r3jrd")]
+valid_groups = Array[String](["test"])
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurt/HurtBox"]
+shape = SubResource("RectangleShape2D_mvfsa")
+debug_color = Color(0.9622802, 1.0588765e-06, 0.50828433, 0.41960785)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="hurt"]
+shape = SubResource("RectangleShape2D_3gxg2")
+debug_color = Color(0, 0.5950001, 0.7, 1)
+
+[node name="hit" type="RigidBody2D" parent="."]
+position = Vector2(285, 380)
+
+[node name="HitBox" parent="hit" groups=["test"] instance=ExtResource("2_cebmn")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hit/HitBox"]
+shape = SubResource("RectangleShape2D_mvfsa")
+debug_color = Color(0.685209, 0.50117946, 1.92523e-07, 0.41960785)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="hit"]
+shape = SubResource("RectangleShape2D_3gxg2")
+debug_color = Color(0, 0.5950001, 0.7, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(227, 426)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("SegmentShape2D_0wfs4")
+debug_color = Color(0, 0.5950001, 0.7, 1)

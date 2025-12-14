@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dq2v5ad8gyqs7"]
+
+[ext_resource type="Script" uid="uid://b6tahfafkjfdx" path="res://systems/components/hit_hurt_box/hurtbox/hurtbox2D.gd" id="1_fwd3w"]
+
+[node name="HurtBox" type="Area2D" groups=["HurtBox"]]
+monitorable = false
+script = ExtResource("1_fwd3w")
+valid_groups = Array[String]([""])
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

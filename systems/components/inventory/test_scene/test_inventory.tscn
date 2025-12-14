@@ -1,0 +1,195 @@
+[gd_scene load_steps=18 format=3 uid="uid://cmi7unonwnua0"]
+
+[ext_resource type="PackedScene" uid="uid://14eavammnb4" path="res://systems/components/inventory/manager/inventoryManager.tscn" id="1_eg52r"]
+[ext_resource type="Script" uid="uid://cpej8i8pm45gk" path="res://systems/components/inventory/item/inventory_item.gd" id="2_53u7a"]
+[ext_resource type="Texture2D" uid="uid://dac7c5ilex2bk" path="res://systems/components/inventory/item/inventory_item_sprite_placeholder.png" id="3_l1y24"]
+
+[sub_resource type="GDScript" id="GDScript_l1y24"]
+resource_name = "input"
+script/source = "extends Node2D
+
+signal cycle_items(forward:bool)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(\"ui_left\"):
+		cycle_items.emit(false)
+	if event.is_action_pressed(\"ui_right\"):
+		cycle_items.emit(true)
+"
+
+[sub_resource type="Gradient" id="Gradient_53u7a"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(1, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_l1y24"]
+gradient = SubResource("Gradient_53u7a")
+
+[sub_resource type="Resource" id="Resource_l1y24"]
+script = ExtResource("2_53u7a")
+icon = SubResource("GradientTexture2D_l1y24")
+description = "red"
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"
+
+[sub_resource type="Gradient" id="Gradient_gd3o1"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xsxdc"]
+gradient = SubResource("Gradient_gd3o1")
+
+[sub_resource type="Resource" id="Resource_gd3o1"]
+script = ExtResource("2_53u7a")
+icon = SubResource("GradientTexture2D_xsxdc")
+description = "blue"
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"
+
+[sub_resource type="Gradient" id="Gradient_qqh8n"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.34916663, 1, 0.29000002, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x8mau"]
+gradient = SubResource("Gradient_qqh8n")
+
+[sub_resource type="Resource" id="Resource_xsxdc"]
+script = ExtResource("2_53u7a")
+icon = SubResource("GradientTexture2D_x8mau")
+item_name = "green"
+description = "green"
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"
+
+[sub_resource type="Resource" id="Resource_qqh8n"]
+script = ExtResource("2_53u7a")
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"
+
+[sub_resource type="Resource" id="Resource_x8mau"]
+script = ExtResource("2_53u7a")
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"
+
+[sub_resource type="GDScript" id="GDScript_qqh8n"]
+resource_name = "item_display"
+script/source = "extends VBoxContainer
+
+var item:InventoryItem:
+	set(new_item):
+		if new_item != item:
+			new_item_assigned.emit(new_item)
+		item = new_item
+			
+signal new_item_assigned(item:InventoryItem)
+
+@export var item_offset:int
+
+func _set_item_values():
+	if !item:
+		print(\"no item???\")
+		return
+	var item_icon:Texture2D = item.icon
+	var item_name:String = item.item_name
+	var item_description:String = item.description
+	$TextureRect.texture = item_icon
+	$Label.text = item_name
+	$Label2.text = item_description
+
+func set_item(new_item:InventoryItem) -> void:
+	item = new_item
+	_set_item_values()
+"
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_l1y24"]
+
+[node name="TestInventory" type="Node2D"]
+script = SubResource("GDScript_l1y24")
+
+[node name="InventoryManager" parent="." instance=ExtResource("1_eg52r")]
+inventory = Array[ExtResource("2_53u7a")]([SubResource("Resource_l1y24"), SubResource("Resource_gd3o1"), SubResource("Resource_xsxdc"), SubResource("Resource_qqh8n"), SubResource("Resource_x8mau")])
+
+[node name="Item" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Item"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 111.0
+offset_top = 189.5
+offset_right = -799.0
+offset_bottom = -189.5
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = SubResource("GDScript_qqh8n")
+
+[node name="TextureRect" type="TextureRect" parent="Item/VBoxContainer"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_l1y24")
+expand_mode = 4
+
+[node name="Label" type="Label" parent="Item/VBoxContainer"]
+layout_mode = 2
+text = "LABEL"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Item/VBoxContainer"]
+layout_mode = 2
+text = "DESCRIPTION"
+horizontal_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Item"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 510.0
+offset_top = 176.0
+offset_right = -400.0
+offset_bottom = -176.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = SubResource("GDScript_qqh8n")
+
+[node name="TextureRect" type="TextureRect" parent="Item/VBoxContainer2"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_l1y24")
+expand_mode = 4
+
+[node name="Label" type="Label" parent="Item/VBoxContainer2"]
+layout_mode = 2
+text = "LABEL"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Item/VBoxContainer2"]
+layout_mode = 2
+text = "DESCRIPTION"
+horizontal_alignment = 1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Item"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 840.0
+offset_top = 172.0
+offset_right = -70.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = SubResource("GDScript_qqh8n")
+
+[node name="TextureRect" type="TextureRect" parent="Item/VBoxContainer3"]
+layout_mode = 2
+texture = SubResource("NoiseTexture2D_l1y24")
+expand_mode = 4
+
+[node name="Label" type="Label" parent="Item/VBoxContainer3"]
+layout_mode = 2
+text = "LABEL"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Item/VBoxContainer3"]
+layout_mode = 2
+text = "DESCRIPTION"
+horizontal_alignment = 1
+
+[connection signal="cycle_items" from="." to="InventoryManager" method="selected_item_cycle"]
+[connection signal="new_current_item" from="InventoryManager" to="Item/VBoxContainer" method="set_item"]
+[connection signal="new_item_assigned" from="Item/VBoxContainer" to="Item/VBoxContainer2" method="set_item"]
+[connection signal="new_item_assigned" from="Item/VBoxContainer2" to="Item/VBoxContainer3" method="set_item"]

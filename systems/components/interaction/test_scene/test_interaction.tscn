@@ -1,0 +1,82 @@
+[gd_scene load_steps=7 format=3 uid="uid://cxjyapdtqw4dv"]
+
+[ext_resource type="PackedScene" uid="uid://nsvi8e8jrha1" path="res://systems/components/interaction/interaction_box/interactionArea2D.tscn" id="1_mvbnw"]
+[ext_resource type="PackedScene" uid="uid://kb2dsiy7jlke" path="res://systems/components/interaction/interactable_area/interactableArea2D.tscn" id="2_kmxjq"]
+
+[sub_resource type="GDScript" id="GDScript_viaxn"]
+resource_name = "follow_mouse"
+script/source = "extends Node2D
+
+func _process(_delta: float) -> void:
+	global_position = get_global_mouse_position()
+
+signal click
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_pressed(): 
+		print(\"test test\")
+		click.emit()
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_veydk"]
+size = Vector2(136, 124)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_viaxn"]
+size = Vector2(62, 65)
+
+[sub_resource type="GDScript" id="GDScript_kmxjq"]
+resource_name = "debug"
+script/source = "extends RichTextLabel
+
+func _on_interaction_box_2d_found_interactable(_area: Area2D) -> void:
+	_set_text(\"found interactable\")
+
+
+func _on_interaction_box_2d_interact(_source: Node) -> void:
+	_set_text(\"attempting interaction...\")
+
+
+func _on_interaction_box_2d_lost_interactable(_area: Area2D) -> void:
+	_set_text(\"lost interactable.\")
+
+
+func _on_interactable_area_2d_interacted(_source: Node) -> void:
+	_set_text(\"succsesful interaction!\")
+
+func _set_text(input:Variant):
+	newline()
+	append_text(str(input))
+"
+
+[node name="TestInteraction" type="Node2D"]
+
+[node name="Node2D" type="Node2D" parent="."]
+script = SubResource("GDScript_viaxn")
+
+[node name="InteractionBox2d" parent="Node2D" instance=ExtResource("1_mvbnw")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/InteractionBox2d"]
+shape = SubResource("RectangleShape2D_veydk")
+debug_color = Color(2.5268644e-06, 0.6482174, 0.19742402, 0.41960785)
+
+[node name="InteractableArea2D" parent="." instance=ExtResource("2_kmxjq")]
+position = Vector2(294, 217)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractableArea2D"]
+position = Vector2(2, 0)
+shape = SubResource("RectangleShape2D_viaxn")
+debug_color = Color(0.68629503, 0.50065833, 7.70092e-07, 0.41960785)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 385.0
+offset_top = 38.0
+offset_right = 936.0
+offset_bottom = 534.0
+fit_content = true
+script = SubResource("GDScript_kmxjq")
+
+[connection signal="click" from="Node2D" to="Node2D/InteractionBox2d" method="try_interaction"]
+[connection signal="found_interactable" from="Node2D/InteractionBox2d" to="RichTextLabel" method="_on_interaction_box_2d_found_interactable"]
+[connection signal="interact" from="Node2D/InteractionBox2d" to="RichTextLabel" method="_on_interaction_box_2d_interact"]
+[connection signal="lost_interactable" from="Node2D/InteractionBox2d" to="RichTextLabel" method="_on_interaction_box_2d_lost_interactable"]
+[connection signal="interacted" from="InteractableArea2D" to="RichTextLabel" method="_on_interactable_area_2d_interacted"]
