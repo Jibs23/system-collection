@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dyrcdnjgu7145"]
+[gd_scene load_steps=7 format=3 uid="uid://dyrcdnjgu7145"]
 
 [ext_resource type="PackedScene" uid="uid://dq2v5ad8gyqs7" path="res://systems/components/hit_hurt_box/hurtbox/hurt_box2D.tscn" id="1_r3jrd"]
 [ext_resource type="PackedScene" uid="uid://bx18366y7df2u" path="res://systems/components/hit_hurt_box/hitbox/hit_box2D.tscn" id="2_cebmn"]
@@ -12,12 +12,27 @@ size = Vector2(36, 38)
 a = Vector2(-217, -4)
 b = Vector2(633, -1)
 
+[sub_resource type="GDScript" id="GDScript_r3jrd"]
+resource_name = "output_hit"
+script/source = "extends RichTextLabel
+
+func _on_hit(dmg:int,source:Node):
+	_set_text(str(source.name, \" did \", dmg, \" dammage!\"))
+
+
+func _set_text(input:Variant):
+	newline()
+	append_text(str(input))
+"
+
 [node name="Node2D" type="Node2D"]
 
 [node name="hurt" type="RigidBody2D" parent="."]
 position = Vector2(294, 142)
 
 [node name="HurtBox" parent="hurt" instance=ExtResource("1_r3jrd")]
+monitoring = false
+monitorable = true
 valid_groups = Array[String](["test"])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hurt/HurtBox"]
@@ -32,6 +47,8 @@ debug_color = Color(0, 0.5950001, 0.7, 1)
 position = Vector2(285, 380)
 
 [node name="HitBox" parent="hit" groups=["test"] instance=ExtResource("2_cebmn")]
+monitoring = true
+monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="hit/HitBox"]
 shape = SubResource("RectangleShape2D_mvfsa")
@@ -47,3 +64,13 @@ position = Vector2(227, 426)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 shape = SubResource("SegmentShape2D_0wfs4")
 debug_color = Color(0, 0.5950001, 0.7, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 385.0
+offset_top = 38.0
+offset_right = 936.0
+offset_bottom = 534.0
+fit_content = true
+script = SubResource("GDScript_r3jrd")
+
+[connection signal="hit" from="hit/HitBox" to="RichTextLabel" method="_on_hit"]

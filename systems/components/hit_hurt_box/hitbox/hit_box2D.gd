@@ -4,11 +4,11 @@ extends Area2D
 static var hurtbox_group: String = "HurtBox"
 
 ## Emmited when this hitbox is hit by a valid hurtbox.
-signal hit(damage: int, from: Node)
+signal hit(damage: int, source: Node)
 
-func _on_hit(damage: int, from: Node) -> void:
-	hit.emit(damage, from)
-	print_debug(self, " in ", get_parent().name, " was hit by ", from.name, " for ", damage, " damage.")
+func _on_hit(damage: int, source: Node) -> void:
+	hit.emit(damage, source)
+	print_debug(self, " in ", get_parent().name, " was hit by ", source.name, " for ", damage, " damage.")
 
 ## Enables or disables this hitbox's monitoring state.
 func hitbox_toggle(enable: bool) -> void:

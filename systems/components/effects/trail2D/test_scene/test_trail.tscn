@@ -1,0 +1,109 @@
+[gd_scene load_steps=10 format=3 uid="uid://26cckihcjwp6"]
+
+[ext_resource type="PackedScene" uid="uid://6gvs37m4l42b" path="res://systems/components/effects/trail2D/trail.tscn" id="1_ptwiq"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ptwiq"]
+bounce = 0.91
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2hern"]
+
+[sub_resource type="Curve" id="Curve_ptwiq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.9145267, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_2hern"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.25, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 0), 0.0, 0.0, 0, 0, Vector2(0.75, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+metadata/_snap_enabled = true
+metadata/_snap_count = 4
+
+[sub_resource type="Curve" id="Curve_b1ni8"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.08951406, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_ll1rw"]
+offsets = PackedFloat32Array(0.0056657195, 1)
+colors = PackedColorArray(0.4000001, 0, 1, 1, 0.48333335, 1, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_wgvao"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0.5999999, 1, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_b1ni8"]
+b = Vector2(611, 0)
+
+[node name="TestTrail" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(388, 151)
+physics_material_override = SubResource("PhysicsMaterial_ptwiq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("CircleShape2D_2hern")
+
+[node name="Trail" parent="RigidBody2D" instance=ExtResource("1_ptwiq")]
+position = Vector2(1, 0)
+width_curve = SubResource("Curve_ptwiq")
+default_color = Color(1, 0, 0, 1)
+
+[node name="RigidBody2D2" type="RigidBody2D" parent="."]
+position = Vector2(238, -203)
+physics_material_override = SubResource("PhysicsMaterial_ptwiq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D2"]
+shape = SubResource("CircleShape2D_2hern")
+
+[node name="Trail" parent="RigidBody2D2" instance=ExtResource("1_ptwiq")]
+position = Vector2(1, 0)
+width_curve = SubResource("Curve_2hern")
+MAX_LENGTH = 36
+
+[node name="RigidBody2D5" type="RigidBody2D" parent="."]
+position = Vector2(738, -449)
+physics_material_override = SubResource("PhysicsMaterial_ptwiq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D5"]
+shape = SubResource("CircleShape2D_2hern")
+
+[node name="Trail" parent="RigidBody2D5" instance=ExtResource("1_ptwiq")]
+position = Vector2(1, 0)
+width_curve = SubResource("Curve_b1ni8")
+gradient = SubResource("Gradient_ll1rw")
+MAX_LENGTH = 5
+
+[node name="RigidBody2D4" type="RigidBody2D" parent="."]
+position = Vector2(112, 123)
+physics_material_override = SubResource("PhysicsMaterial_ptwiq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D4"]
+shape = SubResource("CircleShape2D_2hern")
+
+[node name="Trail" parent="RigidBody2D4" instance=ExtResource("1_ptwiq")]
+position = Vector2(1, 0)
+gradient = SubResource("Gradient_wgvao")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="RigidBody2D3" type="RigidBody2D" parent="."]
+position = Vector2(827, 121)
+physics_material_override = SubResource("PhysicsMaterial_ptwiq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D3"]
+shape = SubResource("CircleShape2D_2hern")
+
+[node name="Trail" parent="RigidBody2D3" instance=ExtResource("1_ptwiq")]
+position = Vector2(1, 0)
+MAX_LENGTH = 60
+
+[node name="floor" type="StaticBody2D" parent="."]
+position = Vector2(227, 459)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="floor"]
+position = Vector2(203, 61)
+rotation = 3.8135445
+shape = SubResource("SegmentShape2D_b1ni8")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="floor"]
+position = Vector2(314, 48)
+rotation = -0.42760566
+shape = SubResource("SegmentShape2D_b1ni8")
