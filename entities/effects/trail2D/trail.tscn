@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://6gvs37m4l42b"]
 
-[ext_resource type="Script" uid="uid://bew8y6jxlekqy" path="res://systems/components/effects/trail2D/trail2D.gd" id="1_ilnta"]
+[ext_resource type="Script" uid="uid://bew8y6jxlekqy" path="res://entities/effects/trail2D/trail2D.gd" id="1_ilnta"]
 
 [node name="Trail" type="Line2D"]
 top_level = true

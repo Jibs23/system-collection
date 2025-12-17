@@ -33,6 +33,7 @@ enabled=PackedStringArray("res://addons/signal_lens/plugin.cfg")
 
 interactable=""
 interacter=""
+character2D=""
 
 [input]
 

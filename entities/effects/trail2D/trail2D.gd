@@ -1,4 +1,4 @@
-@icon("res://systems/components/effects/trail2D/icon_trail2D.png")
+@icon("res://entities/effects/trail2D/icon_trail2D.png")
 extends Line2D
 
 @onready var trailed_object:Node2D = get_parent()

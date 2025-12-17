@@ -1,0 +1,82 @@
+[gd_scene load_steps=5 format=3 uid="uid://dl3n5fa10imy"]
+
+[ext_resource type="Texture2D" uid="uid://ch0my4mcpc3ap" path="res://assets/icon.svg" id="1_ialgu"]
+[ext_resource type="PackedScene" uid="uid://uh5nb7h682kh" path="res://systems/character_controllers/2D/topdown/character_collisionshape_default.tscn" id="2_teawk"]
+
+[sub_resource type="GDScript" id="GDScript_teawk"]
+script/source = "## Used for 2D characters.
+extends CharacterBody2D
+
+## Turn relative to for to charcter.
+enum TURN { AROUND, LEFT, RIGHT }
+
+var input_dir: Vector2 = Vector2.ZERO
+var input_action: Variant
+
+@onready var sprite:AnimatedSprite2D = $AnimatedSprite2D
+@onready var collision_shape:CollisionShape2D = $CollisionShape2D
+
+var facing_direction: Vector2 = Vector2.DOWN:
+	set(dir):
+		if dir == Vector2.ZERO:
+			return
+		if dir != facing_direction and dir:
+			facing_direction_changed.emit(dir)
+		facing_direction = dir
+
+signal facing_direction_changed(new_direction: Vector2)
+
+func _physics_process(_delta: float) -> void:
+	if velocity: move_and_slide()
+
+## Turns a direction relative to the character's facing.
+func turn(direction: TURN) -> void:
+	match direction:
+		TURN.AROUND:
+			facing_direction = -facing_direction
+		TURN.LEFT:
+			facing_direction = Vector2(-facing_direction.y, facing_direction.x)
+		TURN.RIGHT:
+			facing_direction = Vector2(facing_direction.y, -facing_direction.x)
+
+func die() -> void:
+	print(name, \" has died.\")
+	queue_free()
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_luxjd"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ialgu")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="Character2d" type="CharacterBody2D" groups=["character2D"]]
+motion_mode = 1
+script = SubResource("GDScript_teawk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.15625, 0.15625)
+sprite_frames = SubResource("SpriteFrames_luxjd")
+animation = &"idle"
+
+[node name="CollisionShape2D" parent="." instance=ExtResource("2_teawk")]

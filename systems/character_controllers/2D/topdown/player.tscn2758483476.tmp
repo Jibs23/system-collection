@@ -1,0 +1,269 @@
+[gd_scene load_steps=34 format=3 uid="uid://gsy3o3j0gblx"]
+
+[ext_resource type="Script" uid="uid://cm21vwl1kgry1" path="res://Scripts/Custom Classes/player.gd" id="1_dd0ac"]
+[ext_resource type="Shape2D" uid="uid://c8rujmwk3xo86" path="res://Scripts/Custom Classes/shape_character.tres" id="2_jhyir"]
+[ext_resource type="Script" uid="uid://ckvnxywrv7ca3" path="res://Scripts/Custom Classes/health.gd" id="3_0u5uq"]
+[ext_resource type="Script" uid="uid://b7mr0isu8s4g4" path="res://Scenes/states/state_idle.gd" id="3_7g0yx"]
+[ext_resource type="Script" uid="uid://dv418w6msth21" path="res://Scripts/Custom Classes/hit_box.gd" id="4_gk6dx"]
+[ext_resource type="Script" uid="uid://dq10vp1dic4d4" path="res://Scripts/Custom Classes/inventory.gd" id="4_jlvik"]
+[ext_resource type="Script" uid="uid://dhckt5mmujkwm" path="res://Scripts/Custom Classes/finite_state_machine.gd" id="4_r5xpd"]
+[ext_resource type="Script" uid="uid://cb4velf844aeb" path="res://Scenes/actions/act_move.gd" id="5_dey5f"]
+[ext_resource type="Script" uid="uid://8b0ycg4j618n" path="res://Scripts/Custom Classes/interaction_box.gd" id="5_jhyir"]
+[ext_resource type="Texture2D" uid="uid://cn5dwtdnytot6" path="res://Assets/placeholder/2D Pixel Dungeon Asset Pack/character and tileset/Dungeon_Character_2.png" id="6_74mp2"]
+[ext_resource type="Script" uid="uid://cwavegrkkx0ni" path="res://Scenes/states/move_state.gd" id="6_dey5f"]
+[ext_resource type="Script" uid="uid://cpej8i8pm45gk" path="res://Scripts/Custom Classes/inventory_item.gd" id="10_7g0yx"]
+[ext_resource type="Script" uid="uid://cbie8ob5stj0h" path="res://Scripts/Custom Classes/change_rotation.gd" id="12_7g0yx"]
+
+[sub_resource type="GDScript" id="GDScript_06tpx"]
+script/source = "class_name ActDash extends Action
+
+enum State {
+	DASHING,
+	COOLDOWN,
+	IDLE
+}
+
+var current_state: ActDash.State = State.IDLE
+
+@export var cooldown_time: Timer
+@export var cooldown_duration: float = 1.0
+@export var dash_graph: Curve
+@export var dash_distance: float = 20.0
+@export var dash_duration: float = .3
+
+var dash_time: float = 0.0
+
+func start_dash(_dir: Vector2) -> void:
+	if current_state == State.COOLDOWN: return
+	cooldown_time.wait_time = cooldown_duration
+	dash_time = 0.0
+	current_state = State.DASHING
+
+# TODO: Make dash distance and speed configurable with a curve.
+# TODO: Ideally it should determine how quickly the actor moves a designated distance.
+func dash(dir: Vector2, delta: float) -> void:
+	if current_state == State.COOLDOWN: return
+	actor.position += (Vector2(dir) * dash_distance / (dash_duration / delta))
+	actor.move_and_slide()
+	dash_time += delta
+	if dash_time >= dash_duration:
+		_on_dash_complete()
+	
+
+func _on_dash_complete() -> void:
+	current_state = State.COOLDOWN
+	cooldown_time.start()
+	get_parent().state_ready = false
+
+func _on_cooldown_complete() -> void:
+	current_state = State.IDLE
+	get_parent().state_ready = true
+"
+
+[sub_resource type="GDScript" id="GDScript_7g0yx"]
+
+[sub_resource type="Resource" id="Resource_dey5f"]
+script = ExtResource("10_7g0yx")
+item_name = "Dash item"
+state_script = SubResource("GDScript_7g0yx")
+action_script = SubResource("GDScript_06tpx")
+metadata/_custom_type_script = "uid://cpej8i8pm45gk"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7g0yx"]
+size = Vector2(16, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1l0tm"]
+size = Vector2(28, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i6g32"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1l0tm"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v158k"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4fw4"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldgsr"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o5yvi"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rku1e"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfjv2"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1phco"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nb51f"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(64, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnt18"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(80, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ewbju"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(96, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_85qyi"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iivbl"]
+atlas = ExtResource("6_74mp2")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7nbq1"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i6g32")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1l0tm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v158k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4fw4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldgsr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o5yvi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rku1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rfjv2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1phco")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nb51f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nnt18")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ewbju")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_85qyi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iivbl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("inventory", "hit_box", "sprite_sheet", "collide_box", "health_component", "interaction_box", "state_machine") groups=["player"]]
+collision_layer = 256
+collision_mask = 0
+script = ExtResource("1_dd0ac")
+inventory = NodePath("Inventory")
+hit_box = NodePath("HitBox2D")
+sprite_sheet = NodePath("AnimatedSprite2D")
+collide_box = NodePath("CollisionShape2D")
+health_component = NodePath("HealthComponent")
+interaction_box = NodePath("InteractionBox2D")
+state_machine = NodePath("StateMachine")
+metadata/_custom_type_script = "uid://b76b7sjtkfvrw"
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "actor")]
+script = ExtResource("4_r5xpd")
+show_debug = true
+initial_state = NodePath("IdleState")
+actor = NodePath("..")
+metadata/_custom_type_script = "uid://dhckt5mmujkwm"
+
+[node name="IdleState" type="Node" parent="StateMachine"]
+script = ExtResource("3_7g0yx")
+metadata/_custom_type_script = "uid://b7mr0isu8s4g4"
+
+[node name="MoveState" type="Node" parent="StateMachine" node_paths=PackedStringArray("move_action")]
+script = ExtResource("6_dey5f")
+move_action = NodePath("ActMove")
+metadata/_custom_type_script = "uid://cwavegrkkx0ni"
+
+[node name="ActMove" type="Node" parent="StateMachine/MoveState"]
+script = ExtResource("5_dey5f")
+metadata/_custom_type_script = "uid://cb4velf844aeb"
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_0u5uq")
+metadata/_custom_type_script = "uid://ckvnxywrv7ca3"
+
+[node name="Inventory" type="Node" parent="." node_paths=PackedStringArray("actor", "state_machine")]
+script = ExtResource("4_jlvik")
+items = Array[ExtResource("10_7g0yx")]([SubResource("Resource_dey5f")])
+actor = NodePath("..")
+state_machine = NodePath("../StateMachine")
+metadata/_custom_type_script = "uid://dq10vp1dic4d4"
+
+[node name="HitBox2D" type="Area2D" parent="."]
+collision_mask = 2
+script = ExtResource("4_gk6dx")
+metadata/_custom_type_script = "uid://dv418w6msth21"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox2D"]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_7g0yx")
+debug_color = Color(0.97467774, 0, 0.42848563, 0.41960785)
+
+[node name="InteractionBox2D" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("5_jhyir")
+metadata/_custom_type_script = "uid://8b0ycg4j618n"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionBox2D"]
+position = Vector2(14, 0.5)
+shape = SubResource("RectangleShape2D_1l0tm")
+debug_color = Color(0, 0.6493951, 0.15772775, 0.41960785)
+
+[node name="ChangeRotation" type="Node" parent="InteractionBox2D" node_paths=PackedStringArray("rotation_sync")]
+script = ExtResource("12_7g0yx")
+rotation_sync = NodePath("../..")
+metadata/_custom_type_script = "uid://cbie8ob5stj0h"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 5.5)
+shape = ExtResource("2_jhyir")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 1)
+sprite_frames = SubResource("SpriteFrames_7nbq1")
+frame = 3
+
+[connection signal="cycle_item" from="." to="Inventory" method="_on_cycle_item"]
+[connection signal="input_action" from="." to="StateMachine" method="_on_actor_input_action"]
+[connection signal="input_dir" from="." to="StateMachine" method="_on_actor_input_dir"]
+[connection signal="input_interact" from="." to="StateMachine" method="_on_actor_input_interact"]
+[connection signal="health_empty" from="HealthComponent" to="." method="die"]
+[connection signal="area_entered" from="HitBox2D" to="HitBox2D" method="_on_area_entered"]
+[connection signal="hit" from="HitBox2D" to="HealthComponent" method="_on_value_received"]

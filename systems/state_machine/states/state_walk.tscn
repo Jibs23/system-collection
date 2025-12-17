@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3hyh5dl62njx"]
+
+[ext_resource type="PackedScene" uid="uid://cjwsvvhl23ltv" path="res://systems/state_machine/states/state.tscn" id="1_1pqs7"]
+[ext_resource type="Script" uid="uid://0caw5rnnpb4d" path="res://systems/state_machine/states/state_walk.gd" id="2_pu7x6"]
+
+[node name="Walk" instance=ExtResource("1_1pqs7")]
+script = ExtResource("2_pu7x6")
+speed = 18.5

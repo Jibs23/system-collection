@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5ujggysm5tgs"]
+
+[ext_resource type="PackedScene" uid="uid://dl3n5fa10imy" path="res://systems/character_controllers/2D/topdown/character2D_static.tscn" id="1_lmfuw"]
+[ext_resource type="PackedScene" uid="uid://c2dihr7yqr7ex" path="res://systems/character_controllers/2D/topdown/player.tscn" id="2_dvvqc"]
+[ext_resource type="PackedScene" uid="uid://72gc7i8b76kv" path="res://systems/character_controllers/2D/topdown/character_2d_dynamic.tscn" id="2_jxrk0"]
+
+[node name="TestCharacter2d" type="Node2D"]
+
+[node name="Character2d" parent="." instance=ExtResource("1_lmfuw")]
+position = Vector2(217, 304)
+
+[node name="Character2d2" parent="." instance=ExtResource("1_lmfuw")]
+position = Vector2(476, 152)
+
+[node name="Character2d3" parent="." instance=ExtResource("2_jxrk0")]
+position = Vector2(285, 169)
+motion_mode = 0
+
+[node name="Player" parent="Character2d3" instance=ExtResource("2_dvvqc")]

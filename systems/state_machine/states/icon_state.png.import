@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buopxxltycd6r"
-path="res://.godot/imported/icon_trail2D.png-52af1ee5a93132bb4aacf13a22c28935.ctex"
+uid="uid://byw7k0kqns22f"
+path="res://.godot/imported/icon_state.png-514080ab575d172ffc8c85194d8ab50e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://systems/components/effects/trail2D/icon_trail2D.png"
-dest_files=["res://.godot/imported/icon_trail2D.png-52af1ee5a93132bb4aacf13a22c28935.ctex"]
+source_file="res://systems/state_machine/states/icon_state.png"
+dest_files=["res://.godot/imported/icon_state.png-514080ab575d172ffc8c85194d8ab50e.ctex"]
 
 [params]
 

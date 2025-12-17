@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://72gc7i8b76kv"]
+
+[ext_resource type="PackedScene" uid="uid://dl3n5fa10imy" path="res://systems/character_controllers/2D/topdown/character2D_static.tscn" id="1_bnu58"]
+[ext_resource type="PackedScene" uid="uid://ba8835a05yb4k" path="res://systems/state_machine/state_machine.tscn" id="2_2ostj"]
+[ext_resource type="PackedScene" uid="uid://m4hs6gs4kgqj" path="res://systems/state_machine/states/state_idle.tscn" id="3_0v3k5"]
+[ext_resource type="PackedScene" uid="uid://b3hyh5dl62njx" path="res://systems/state_machine/states/state_walk.tscn" id="4_68pws"]
+
+[node name="Character2d" instance=ExtResource("1_bnu58")]
+
+[node name="StateMachine" parent="." index="2" node_paths=PackedStringArray("initial_state") instance=ExtResource("2_2ostj")]
+initial_state = NodePath("Idle")
+
+[node name="Idle" parent="StateMachine" index="0" node_paths=PackedStringArray("walk", "state_idle") instance=ExtResource("3_0v3k5")]
+walk = NodePath("../Walk")
+state_idle = NodePath(".")
+
+[node name="Walk" parent="StateMachine" index="1" node_paths=PackedStringArray("state_idle") instance=ExtResource("4_68pws")]
+speed = 50.0
+state_idle = NodePath("../Idle")
